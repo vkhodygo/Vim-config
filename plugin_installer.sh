@@ -22,6 +22,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'lervag/vimtex'
+Plugin 'dracula/vim'
 
 call vundle#end()
 
@@ -32,7 +33,14 @@ EOF
 pip3 install --user powerline-status
 pip install --user powerline-status
 
+cd ~/.fonts/
 wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+fc-cache -vf ~/.fonts/
+
+mkdir ~/.config/fontconfig
+mkdir ~/.config/fontconfig/conf.d/
+
+cd ~/.config/fontconfig/conf.d/
 wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
 
 
@@ -50,4 +58,5 @@ map <C-n> :NERDTreeToggle<CR>
 
 let g:airline#extensions#tabline#enabled = 1
 syntax on
+color dracula
 EOF
