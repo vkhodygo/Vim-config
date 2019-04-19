@@ -8,6 +8,7 @@ touch ~/.vim/plugins.vim # creates a list of plugins for vundle
 # mkdir ycm_build
 # cd ycm_build
 # cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON -DUSE_SYSTEM_BOOST=ON -DUSE_CLANG_TIDY=ON . ~/.vim/bundle/youcompleteme/third_party/ycmd/cpp
+# ./install.py --clang-completer --clangd-completer --clang-tidy 
 # need to fix tex conceal issues: strange fonts? 
 # need to fix font issues: no symbols for powerline, nerdtree looks terrible
 # need to fix spellchecking: do not have at all
@@ -52,14 +53,16 @@ Plugin 'lervag/vimtex'						" tex features
 Plugin 'keitanakamura/tex-conceal.vim'		" not tested; conceal doesn't work properly
 Plugin 'donraphaco/neotex'					" pdf preview while editing + latexdiff
 
+Plugin 'integralist/vim-mypy'			" python typechecking 
+Plugin 'neutaaaaan/iosvkem'			" color scheme
 call vundle#end()
 
 filetype plugin indent on
 
 EOF
 
-pip3 install --user --upgrade powerline-status
-pip install --user --upgrade powerline-status
+#pip3 install --user --upgrade powerline-status
+#pip install --user --upgrade powerline-status
 
 #cd ~/.fonts/
 #wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
@@ -84,6 +87,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <C-n> :NERDTreeToggle<CR>
 " nerdtree section
 
+let g:powerline_pycmd="py3"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 syntax on
@@ -98,9 +102,20 @@ set listchars=eol:¬,tab:␉·,trail:␠,extends:❯,precedes:❮,nbsp:⎵,space
  "set listchars=tab:>-,eol:¬,trail:⋅,extends:❯,precedes:❮,nbsp:⎵,space:·
  
 let g:neotex_enabled = 2
-let g:neotex_latexdiff = 0
+let g:neotex_latexdiff = 1
+let g:neotex_delay = 50
 let g:tex_flavor = 'latex'
 
+augroup python_files
+    autocmd!
+    autocmd FileType python setlocal noexpandtab
+    autocmd FileType python set tabstop=4
+    autocmd FileType python set shiftwidth=4
+augroup END
+
+set encoding=utf8
+set guifont=DroidSansMono\ Nerd\ Font\ 10
+set t_Co=256
 set exrc
 set secure
 EOF

@@ -1,0 +1,36 @@
+diff --git a/ftplugin/tex.vim b/ftplugin/tex.vim
+index a0ddeee..7c695fa 100644
+--- a/ftplugin/tex.vim
++++ b/ftplugin/tex.vim
+@@ -94,6 +94,8 @@ endif
+ let b:neotex_compile_cwd = fnamemodify(b:neotex_mainfile, ':h')
+ 
+ let b:neotex_jobexe=''
++let b:mupdf_jobexe=''
++let b:mupdf_jobexe .= 'pkill -HUP mupdf'
+ 
+ if get(g:, 'neotex_latexdiff', 0) && !get(g:, 'neotex_subfile', 0)
+     let b:neotex_prediff = s:prediff_tempfile
+@@ -125,6 +127,12 @@ function! s:job_exit(...)
+     endif
+ endfunction
+ 
++function! s:mupdf_job_exit(...)
++    if exists('s:job_mupdf')
++        unlet s:job_mupdf
++    endif
++endfunction
++
+ function! s:job_log(job_id, data, event)
+     if get(g:, 'neotex_log', 0)
+                 \ && (a:event == 'stderr' || g:neotex_log == 2)
+@@ -160,7 +168,9 @@ function! s:latex_compile(_)
+                 let options.out_name = 'neotex.log'
+             endif
+         endif
++	let options_mupdf = {'exit_cb': function('s:mupdf_job_exit')}
+         let s:job = job_start(['bash', '-c', b:neotex_jobexe], options)
++        let s:job_mupdf = job_start(['bash', '-c', b:mupdf_jobexe], options_mupdf)
+     endif
+     if exists('s:timer')
+         unlet s:timer
